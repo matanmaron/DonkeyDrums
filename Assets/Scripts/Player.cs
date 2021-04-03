@@ -1,3 +1,4 @@
+using DonkeyDrums.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,57 +8,59 @@ namespace DonkeyDrums.Core
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] float stopSpeed = 0.01f;
-        [SerializeField] float maxSpeed = 2;
-        [SerializeField] float speedBumps = 0.1f;
-        [SerializeField] float JumpForce = 2f;
-
         private Animator animator = null;
-        private Rigidbody2D rigidbody2D = null;
+        private Rigidbody2D rbody = null;
         private float speed = 0f;
         private bool keyAlternate;
         private bool isWalking = false;
         private bool isGrounded = false;
+        private GameData data;
 
         private void Start()
         {
             animator = GetComponent<Animator>();
-            rigidbody2D = GetComponent<Rigidbody2D>();
+            rbody = GetComponent<Rigidbody2D>();
+            data = Settings.ImportSettings();
+            Debug.Log(data);
         }
 
         private void Update()
         {
+            if (transform.position.y < -10)
+            {
+                GameManager.Instance.GameOver();
+            }
             if (Input.GetKeyDown(KeyCode.RightArrow) && keyAlternate == false)
             {
-                speed += speedBumps;
+                speed += data.speedBumps;
                 keyAlternate = true;
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow) && keyAlternate == true)
             {
-                speed += speedBumps;
+                speed += data.speedBumps;
                 keyAlternate = false;
             }
             else
             {
-                speed -= stopSpeed;
+                speed -= data.stopSpeed;
             }
             if (speed < 0)
             {
                 speed = 0;
             }
-            if (speed > maxSpeed)
+            if (speed > data.maxSpeed)
             {
-                speed = maxSpeed;
+                speed = data.maxSpeed;
             }
             if (speed != 0)
             {
                 transform.position += Vector3.right * speed * Time.deltaTime;
-                Debug.Log($"speed - {speed}");
+                //Debug.Log($"speed - {speed}");
             }
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
                 isGrounded = false;
-                rigidbody2D.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
+                rbody.AddForce(new Vector2(0, data.jumpForce), ForceMode2D.Impulse);
             }
             SetAnim();
         }
@@ -66,11 +69,13 @@ namespace DonkeyDrums.Core
         {
             if (speed != 0 && !isWalking)
             {
+                //Debug.Log("Animator - Walking");
                 isWalking = true;
                 animator.SetBool("Walking", true);
             }
             else if (speed == 0 && isWalking)
             {
+                //Debug.Log("Animator - Idle");
                 isWalking = false;
                 animator.SetBool("Walking", false);
             }
@@ -78,9 +83,20 @@ namespace DonkeyDrums.Core
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.tag == "Ground")
+            if (!isGrounded && collision.gameObject.tag == "Ground")
             {
+                Debug.Log("Hit Ground");
                 isGrounded = true;
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag == "Coin")
+            {
+                Debug.Log("Hit Coin");
+                GameManager.Instance.AddCoin();
+                Destroy(collision.gameObject);
             }
         }
     }
