@@ -26,6 +26,10 @@ namespace DonkeyDrums.Core
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
             if (transform.position.y < -10)
             {
                 GameManager.Instance.GameOver();
