@@ -8,32 +8,21 @@ namespace DonkeyDrums.Data
 {
     public class Settings
     {
-        private const string FileName = "settings.json";
-
         public static GameData ImportSettings()
         {
-            if (!File.Exists($"{Application.dataPath}/{FileName}"))
-            {
-                Debug.LogWarning("no settings file found, creating default");
-                var data = new GameData();
-                ExportSettings(data);
-                return data;
-            }
-            string jsonImport = File.ReadAllText($"{Application.dataPath}/{FileName}");
-            if (jsonImport == "{}")
-            {
-                Debug.LogWarning("settings file empty, creating default");
-                var data = new GameData();
-                ExportSettings(data);
-                return data;
-            }
-            return JsonUtility.FromJson<GameData>(jsonImport);
+            var gameData = new GameData();
+            gameData.stopSpeed = PlayerPrefs.GetFloat("stopSpeed", 0.05f);
+            gameData.maxSpeed = PlayerPrefs.GetFloat("maxSpeed", 5f);
+            gameData.speedBumps = PlayerPrefs.GetFloat("speedBumps", 1f);
+            gameData.jumpForce = PlayerPrefs.GetFloat("jumpForce", 12f);
+            return gameData;
         }
-        static void ExportSettings(GameData settings)
+        public static void ExportSettings(GameData settings)
         {
-            string jsonExport = JsonUtility.ToJson(settings);
-            File.WriteAllText($"{Application.dataPath}/{FileName}", jsonExport);
-            Debug.Log("settings exported successfully");
+            PlayerPrefs.SetFloat("stopSpeed", settings.stopSpeed);
+            PlayerPrefs.SetFloat("maxSpeed", settings.maxSpeed);
+            PlayerPrefs.SetFloat("speedBumps", settings.speedBumps);
+            PlayerPrefs.SetFloat("jumpForce", settings.jumpForce);
         }
     }
 

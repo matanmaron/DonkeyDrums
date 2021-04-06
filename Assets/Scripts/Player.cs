@@ -14,22 +14,16 @@ namespace DonkeyDrums.Core
         private bool keyAlternate;
         private bool isWalking = false;
         private bool isGrounded = false;
-        private GameData data;
+        GameData data => GameManager.Instance.data;
 
         private void Start()
         {
             animator = GetComponent<Animator>();
             rbody = GetComponent<Rigidbody2D>();
-            data = Settings.ImportSettings();
-            Debug.Log(data);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
             if (transform.position.y < -10)
             {
                 GameManager.Instance.GameOver();
