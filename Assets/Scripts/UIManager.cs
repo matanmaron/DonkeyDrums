@@ -17,6 +17,7 @@ namespace DonkeyDrums.UI
         [SerializeField] TMP_InputField SpeedBumps = null;
         [SerializeField] TMP_InputField JumpForce = null;
         [SerializeField] TextMeshProUGUI ErrorText = null;
+        [SerializeField] TextMeshProUGUI Wintext = null;
         GameData data => GameManager.Instance.data;
 
         internal void ShowCoins(int coins)
@@ -52,6 +53,11 @@ namespace DonkeyDrums.UI
             {
                 ErrorText.text = ex.ToString();
             }
+        }
+
+        internal void YouWin()
+        {
+            Wintext.gameObject.SetActive(true);
         }
 
         private void LoadSettings()

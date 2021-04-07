@@ -11,6 +11,7 @@ namespace DonkeyDrums.Core
     public class GameManager : MonoBehaviour
     {
         [SerializeField] UIManager UIManager = null;
+        [SerializeField] public AudioManager AudioManager = null;
         public GameData data;
         private static GameManager _instance;
         private int coins = 0;
@@ -51,6 +52,19 @@ namespace DonkeyDrums.Core
         {
             coins++;
             UIManager.ShowCoins(coins);
+            if (coins == 11)
+            {
+                StartCoroutine(YouWin());
+            }
+        }
+
+        IEnumerator YouWin()
+        {
+            AudioManager.PlayMusic();
+            AudioManager.PlayWin();
+            UIManager.YouWin();
+            yield return new WaitForSeconds(5);
+            GameOver();
         }
 
         internal void GameOver()

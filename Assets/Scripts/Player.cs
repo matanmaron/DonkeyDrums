@@ -57,6 +57,7 @@ namespace DonkeyDrums.Core
             }
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
+                GameManager.Instance.AudioManager.PlayJump();
                 isGrounded = false;
                 rbody.AddForce(new Vector2(0, data.jumpForce), ForceMode2D.Impulse);
             }
@@ -67,12 +68,14 @@ namespace DonkeyDrums.Core
         {
             if (speed != 0 && !isWalking)
             {
+                GameManager.Instance.AudioManager.PlayMusic();
                 //Debug.Log("Animator - Walking");
                 isWalking = true;
                 animator.SetBool("Walking", true);
             }
             else if (speed == 0 && isWalking)
             {
+                GameManager.Instance.AudioManager.StopMusic();
                 //Debug.Log("Animator - Idle");
                 isWalking = false;
                 animator.SetBool("Walking", false);
@@ -93,6 +96,7 @@ namespace DonkeyDrums.Core
             if (collision.gameObject.tag == "Coin")
             {
                 Debug.Log("Hit Coin");
+                GameManager.Instance.AudioManager.PlayScore();
                 GameManager.Instance.AddCoin();
                 Destroy(collision.gameObject);
             }

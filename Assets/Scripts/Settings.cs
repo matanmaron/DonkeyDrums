@@ -14,7 +14,7 @@ namespace DonkeyDrums.Data
             gameData.stopSpeed = PlayerPrefs.GetFloat("stopSpeed", 0.05f);
             gameData.maxSpeed = PlayerPrefs.GetFloat("maxSpeed", 5f);
             gameData.speedBumps = PlayerPrefs.GetFloat("speedBumps", 1f);
-            gameData.jumpForce = PlayerPrefs.GetFloat("jumpForce", 12f);
+            gameData.jumpForce = PlayerPrefs.GetFloat("jumpForce", 9f);
             return gameData;
         }
         public static void ExportSettings(GameData settings)
