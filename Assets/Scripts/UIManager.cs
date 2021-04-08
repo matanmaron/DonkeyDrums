@@ -18,7 +18,13 @@ namespace DonkeyDrums.UI
         [SerializeField] TMP_InputField JumpForce = null;
         [SerializeField] TextMeshProUGUI ErrorText = null;
         [SerializeField] TextMeshProUGUI Wintext = null;
+        [SerializeField] TextMeshProUGUI FadeText = null;
         GameData data => GameManager.Instance.data;
+
+        private void Start()
+        {
+            StartCoroutine(fadeText());
+        }
 
         internal void ShowCoins(int coins)
         {
@@ -66,6 +72,12 @@ namespace DonkeyDrums.UI
             MaxSpeed.text = data.maxSpeed.ToString();
             SpeedBumps.text = data.speedBumps.ToString();
             JumpForce.text = data.jumpForce.ToString();
+        }
+
+        IEnumerator fadeText()
+        {
+            yield return new WaitForSeconds(10);
+            FadeText.gameObject.SetActive(false);
         }
     }
 }

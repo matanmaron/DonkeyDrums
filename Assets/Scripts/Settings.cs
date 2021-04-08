@@ -32,7 +32,7 @@ namespace DonkeyDrums.Data
         public float stopSpeed = 0.05f;
         public float maxSpeed = 5;
         public float speedBumps = 1;
-        public float jumpForce = 12;
+        public float jumpForce = 10;
 
         public override string ToString()
         {

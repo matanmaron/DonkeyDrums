@@ -67,7 +67,7 @@ namespace DonkeyDrums.Core
             GameOver();
         }
 
-        internal void GameOver()
+        public void GameOver()
         {
             SceneManager.LoadScene(0);
         }
